@@ -11,7 +11,7 @@ Install
 
     git clone https://github.com/Filirom1/npm2arch
     cd npm2arch
-    npm install -g
+    [sudo] npm install -g
 
 
 Usage
