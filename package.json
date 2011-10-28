@@ -13,8 +13,9 @@
   },
   "main": "lib/npm2arch.coffee",
   "bin": {
-    "npm2PKGBUILD": "bin/npm2PKGBUILD.js",
-    "npm2archpkg": "bin/npm2archpkg.js"
+    "npm2PKGBUILD": "bin/npm2PKGBUILD",
+    "npm2archpkg": "bin/npm2archpkg",
+    "npm2archinstall": "bin/npm2archinstall"
   },
   "preferGlobal": true,
   "engines": {

@@ -1,0 +1,67 @@
+#!/usr/bin/env node
+require('coffee-script');
+var npm2arch = require('../lib/npm2arch.coffee'),
+          fs = require('fs'),
+        util = require('util'),
+      rimraf = require('rimraf'),
+       spawn = require('child_process').spawn;
+
+if(process.argv.length != 3){
+  console.error("Usage: npm2archinstall `npm-name`");
+  process.exit(-1);
+}
+
+var npmName = process.argv[2];
+
+function handleError(err){
+  console.error(err);
+  process.exit(-1);
+}
+
+var randomId =  (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+var tmpDir = '/tmp/npm2archinstall-' + randomId;
+// Create a package for archlinux with makepkg cmd
+npm2arch(npmName, function(err, pkgbuild){
+  if(err) handleError(err);
+  // Create a tmp directory to work
+  fs.mkdir(tmpDir, '0755', function(err){
+    var cwd = process.cwd();
+    process.chdir(tmpDir);
+    // Write the PKGBUILD file on the cwd
+    fs.writeFile('PKGBUILD', pkgbuild, function(err){
+      if(err) handleError(err);
+      // Pass to makepkg the remainings arguments of this call
+      var child = spawn('makepkg');
+      child.stdout.pipe(process.stdout, { end: false });
+      child.stderr.pipe(process.stderr, { end: false });
+      child.on('exit', function (code) {
+        if (code !== 0) process.exit(code);
+        // Delete the PKGBUILD
+        fs.unlink('PKGBUILD', function(err){
+          if(err) handleError(err);
+          // Get the package file name
+          fs.readdir(tmpDir, function(err, files){
+            if(err) handleError(err);
+            var pkgFile = files.filter(function(file){ return (file.indexOf('nodejs-') === 0); })[0];
+            // Install the pckage via a sudo pacman -U `pkgFile`
+            console.log('\nsudo pacman -U ' + pkgFile);
+            process.stdin.resume();
+            var pacman = spawn('sudo', ['pacman', '-U', pkgFile]);
+            process.stdin.pipe(pacman.stdin, { end: false });
+            pacman.stdout.pipe(process.stdout, { end: false });
+            pacman.stderr.pipe(process.stderr, { end: false });
+            pacman.on('exit', function (code) {
+              if (code !== 0) process.exit(code);
+              // Delete the tmp directory
+              process.chdir(cwd);
+              rimraf(tmpDir, function(err){
+                if(err) handleError(err);
+                process.exit(0);
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});
