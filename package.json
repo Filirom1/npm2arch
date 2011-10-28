@@ -1,0 +1,29 @@
+{
+  "author": "Filirom1 <filirom1@gmail.com>",
+  "name": "npm2arch",
+  "description": "Convert NPM package to a PKGBUILD for ArchLinux",
+  "version": "0.1.0",
+  "homepage": "",
+  "repository": {
+    "url": ""
+  },
+  "licenses": {
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/MIT"
+  },
+  "main": "lib/npm2arch.coffee",
+  "bin": {
+    "npm2PKGBUILD": "bin/npm2PKGBUILD.js",
+    "npm2archpkg": "bin/npm2archpkg.js"
+  },
+  "preferGlobal": true,
+  "engines": {
+    "node": "~0.4.12"
+  },
+  "dependencies": {
+    "coffee-script": "1.1.x",
+    "npm": "1.0.x",
+    "mustache": "0.3.x",
+    "rimraf": "1.0.x"
+  }
+}
