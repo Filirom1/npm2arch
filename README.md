@@ -8,6 +8,12 @@ NPM package.json --> PKGBUILD for pacman
 
 Install
 -------
+### From AUR : 
+yaourt -S nodejs-npm2arch
+<https://aur.archlinux.org/packages.php?ID=53502>
+
+
+### From sources
 
     git clone https://github.com/Filirom1/npm2arch
     cd npm2arch
