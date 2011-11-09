@@ -19,8 +19,10 @@ module.exports = (npmName, cb) ->
     version = Object.keys(data)[0]
     package = data[version]
     package = cleanup package
-    package.contributor = package.contributors
-    package.maintainer = package.maintainers
+    package.nameLowerCase = package.name.toLowerCase()
+    package.contributors = [package.contributors] if typeof package.contributors is 'string'
+    package.maintainers = [package.maintainers] if typeof package.maintainers is 'string'
+    package.homepage or= package.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '') if package.repository?.url
     populateTemplate package
 
   # Populate the template
@@ -32,18 +34,18 @@ template = '''{{#author}}
 # Author: {{{author}}}
 {{/author}}
 {{#contributors}}
-# Contributor: {{{.}}}{{{contributor}}}
+# Contributor: {{{.}}}
 {{/contributors}}
 {{#maintainers}}
-# Maintainer: {{{.}}}{{{maintainer}}}
+# Maintainer: {{{.}}}
 {{/maintainers}}
 _npmname={{{name}}}
-pkgname=nodejs-$_npmname # All lowercase
+pkgname=nodejs-{{{nameLowerCase}}} # All lowercase
 pkgver={{{version}}}
 pkgrel=1
 pkgdesc=\"{{{description}}}\"
 arch=(any)
-url=\"{{#repository}}{{{url}}}{{/repository}}\"
+url=\"{{{homepage}}}\"
 license=({{#licenses}}{{{type}}}{{/licenses}})
 depends=(nodejs)
 makedepends=(nodejs-npm)

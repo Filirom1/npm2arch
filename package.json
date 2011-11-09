@@ -2,7 +2,7 @@
   "author": "Filirom1 <filirom1@gmail.com>",
   "name": "npm2arch",
   "description": "Convert NPM package to a PKGBUILD for ArchLinux",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/Filirom1/npm2arch",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   },
   "preferGlobal": true,
   "engines": {
-    "node": "~0.4.12"
+    "node": "~0.6.0"
   },
   "dependencies": {
     "coffee-script": "1.1.x",
