@@ -4,6 +4,7 @@ util     = require 'util'
 rimraf   = require 'rimraf'
 {spawn}  = require 'child_process'
 npm2arch = require './npm2PKGBUILD'
+UUID     = require 'uuid-js'
 
 
 module.exports = (npmName, makePkgArgv, cb, verbose) ->
@@ -13,7 +14,7 @@ module.exports = (npmName, makePkgArgv, cb, verbose) ->
   makePkgArgv or= []
   verbose = true if verbose is undefined or verbose is null
 
-  randomId =  (((1+Math.random())*0x10000)|0).toString(16).substring(1)
+  randomId = UUID.create()
   tmpDir = '/tmp/npm2archinstall-' + randomId
 
   # Create a package for archlinux with makepkg cmd
@@ -21,27 +22,32 @@ module.exports = (npmName, makePkgArgv, cb, verbose) ->
     return cb err if err
     # Create a tmp directory to work on
     fs.mkdir tmpDir, '0755', (err)->
+      return cb err if err
+      cb2 = ->
+        arg = arguments
+        process.chdir cwd
+        # Delete the tmp directory
+        rimraf tmpDir, (err) ->
+          return cb err if err
+          cb.apply(this, arg)
+
       cwd = process.cwd()
       process.chdir tmpDir
       # Write the PKGBUILD file on the cwd
       fs.writeFile 'PKGBUILD', pkgbuild, (err)->
-        return cb err if err
+        return cb2 err if err
         # Spawn makepkg
         child = spawn 'makepkg', makePkgArgv
         child.stdout.pipe(process.stdout, end: false) if verbose
         child.stderr.pipe(process.stderr, end: false) if verbose
         child.on 'exit', (code) ->
-          cb err "Bad status code returned from `makepkg`: #{code}" if code is not 0
+          cb2 err "Bad status code returned from `makepkg`: #{code}" if code is not 0
           # Get the package file name
           fs.readdir tmpDir, (err, files)->
-            return cb err if err
+            return cb2 err if err
             pkgFile = (files.filter (file)-> file.indexOf('nodejs-') is 0)[0]
             newPkgFile = path.join(cwd, path.basename pkgFile)
             fs.unlinkSync newPkgFile if path.existsSync newPkgFile
             fs.move path.join(tmpDir, pkgFile), newPkgFile, (err)->
-              cb err if err
-              # Delete the tmp directory
-              rimraf tmpDir, (err) ->
-                return cb err if err
-                process.chdir cwd
-                cb null, newPkgFile
+              cb2 err if err
+              cb2 null, newPkgFile
