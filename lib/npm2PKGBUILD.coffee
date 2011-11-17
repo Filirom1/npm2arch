@@ -22,6 +22,7 @@ module.exports = (npmName, cb) ->
     package.nameLowerCase = package.name.toLowerCase()
     package.contributors = [package.contributors] if typeof package.contributors is 'string'
     package.maintainers = [package.maintainers] if typeof package.maintainers is 'string'
+    package.homepage or= package.url
     package.homepage or= package.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '') if package.repository?.url
     populateTemplate package
 
