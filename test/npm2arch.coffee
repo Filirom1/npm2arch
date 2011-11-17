@@ -45,7 +45,7 @@ vows.describe('Test npm2arch')
       dir = "/tmp/test-npm2arch-#{randomId}-dir/"
       fs.mkdirSync dir
       process.chdir dir
-      createPkg 'npm2arch', ['--source'], @callback, false
+      createPkg 'npm2arch', ['--source'], verbose: false, @callback
       return
     'Then a package is created': (err, file) ->
       assert.isNull err
@@ -54,12 +54,11 @@ vows.describe('Test npm2arch')
       assert.include file, 'nodejs-npm2arch-'
       assert.include file, '.src.tar.gz'
       assert.isTrue path.existsSync file
-      process.chdir cwd
       rimraf.sync path.dirname file
 
   'When calling createPkg with a bad package name':
     topic: ->
-      createPkg 'qsdfqsdfqsd', ['--source'], @callback, false
+      createPkg 'qsdfqsdfqsd', ['--source'], verbose: false, @callback
       return
     'Then an error is returned': (err, file) ->
       assert.isNotNull err

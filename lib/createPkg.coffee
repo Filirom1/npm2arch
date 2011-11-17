@@ -7,13 +7,17 @@ npm2arch = require './npm2PKGBUILD'
 UUID     = require 'uuid-js'
 
 
-module.exports = (npmName, makePkgArgv, cb, verbose) ->
+module.exports = (npmName, makePkgArgv, options, cb) ->
   if typeof makePkgArgv is 'function'
     cb = makePkgArgv
     makePkgArgv = null
+    options = null
+  if typeof options is 'function'
+    cb = options
+    options = null
   makePkgArgv or= []
-  verbose = true if verbose is undefined or verbose is null
-
+  options or= verbose: true
+  verbose = options.verbose
   randomId = UUID.create()
   tmpDir = '/tmp/npm2archinstall-' + randomId
 
@@ -25,19 +29,16 @@ module.exports = (npmName, makePkgArgv, cb, verbose) ->
       return cb err if err
       cb2 = ->
         arg = arguments
-        process.chdir cwd
         # Delete the tmp directory
         rimraf tmpDir, (err) ->
           return cb err if err
           cb.apply(this, arg)
 
-      cwd = process.cwd()
-      process.chdir tmpDir
-      # Write the PKGBUILD file on the cwd
-      fs.writeFile 'PKGBUILD', pkgbuild, (err)->
+      # Write the PKGBUILD file in the tmpDir
+      fs.writeFile path.join(tmpDir, "PKGBUILD"), pkgbuild, (err)->
         return cb2 err if err
         # Spawn makepkg
-        child = spawn 'makepkg', makePkgArgv
+        child = spawn 'makepkg', makePkgArgv, cwd: tmpDir, env: process.env, setsid: false
         child.stdout.pipe(process.stdout, end: false) if verbose
         child.stderr.pipe(process.stderr, end: false) if verbose
         child.on 'exit', (code) ->
@@ -46,7 +47,7 @@ module.exports = (npmName, makePkgArgv, cb, verbose) ->
           fs.readdir tmpDir, (err, files)->
             return cb2 err if err
             pkgFile = (files.filter (file)-> file.indexOf('nodejs-') is 0)[0]
-            newPkgFile = path.join(cwd, path.basename pkgFile)
+            newPkgFile = path.join(process.cwd(), path.basename pkgFile)
             fs.unlinkSync newPkgFile if path.existsSync newPkgFile
             fs.move path.join(tmpDir, pkgFile), newPkgFile, (err)->
               cb2 err if err
