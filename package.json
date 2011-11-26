@@ -2,16 +2,16 @@
   "author": "Filirom1 <filirom1@gmail.com>",
   "name": "npm2arch",
   "description": "Convert NPM package to a PKGBUILD for ArchLinux",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "https://github.com/Filirom1/npm2arch",
   "repository": {
     "type": "git",
     "url": "git://github.com/Filirom1/npm2arch.git"
   },
-  "licenses": {
+  "licenses": [{
     "type": "MIT",
     "url": "http://www.opensource.org/licenses/MIT"
-  },
+  }],
   "main": "index.js",
   "bin": {
     "npm2PKGBUILD": "bin/npm2PKGBUILD",
@@ -31,6 +31,9 @@
     "uuid-js": "0.7.x"
   },
   "devDependencies": {
-    "vows": "0.5.x"
+    "vows": "0.6.x"
+  },
+  "scripts": {
+    "test": "vows --spec test/*"
   }
 }
