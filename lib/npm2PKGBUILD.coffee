@@ -49,7 +49,6 @@ arch=(any)
 url=\"{{{homepage}}}\"
 license=({{#licenses}}{{{type}}}{{/licenses}})
 depends=(nodejs)
-makedepends=(nodejs-npm)
 source=(http://registry.npmjs.org/$_npmname/-/$_npmname-$pkgver.tgz)
 noextract=($_npmname-$pkgver.tgz)
 sha1sums=({{#dist}}{{{shasum}}}{{/dist}})
