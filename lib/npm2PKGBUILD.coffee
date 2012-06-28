@@ -3,7 +3,7 @@ npm      = require 'npm'
 mustache = require 'mustache'
 fs       = require 'fs'
 
-# transform package.json of `npmName` into a PKGBUILD
+# transform pkg.json of `npmName` into a PKGBUILD
 # `cb` is called like this: `cb(err, pkgbuild)`
 module.exports = (npmName, cb) ->
 
@@ -17,18 +17,18 @@ module.exports = (npmName, cb) ->
   # Parse the info json
   parseNPM = (data) ->
     version = Object.keys(data)[0]
-    package = data[version]
-    package = cleanup package
-    package.nameLowerCase = package.name.toLowerCase()
-    package.contributors = [package.contributors] if typeof package.contributors is 'string'
-    package.maintainers = [package.maintainers] if typeof package.maintainers is 'string'
-    package.homepage or= package.url
-    package.homepage or= package.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '').replace(/(\.\w*)\:/g, '$1\/') if package.repository?.url
-    populateTemplate package
+    pkg = data[version]
+    pkg = cleanup pkg
+    pkg.nameLowerCase = pkg.name.toLowerCase()
+    pkg.contributors = [pkg.contributors] if typeof pkg.contributors is 'string'
+    pkg.maintainers = [pkg.maintainers] if typeof pkg.maintainers is 'string'
+    pkg.homepage or= pkg.url
+    pkg.homepage or= pkg.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '').replace(/(\.\w*)\:/g, '$1\/') if pkg.repository?.url
+    populateTemplate pkg
 
   # Populate the template
-  populateTemplate = (package) ->
-    cb null, mustache.to_html(template, package)
+  populateTemplate = (pkg) ->
+    cb null, mustache.to_html(template, pkg)
 
 
 template = '''{{#author}}
