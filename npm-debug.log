@@ -1,0 +1,70 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'adduser' ]
+2 info using npm@1.1.32
+3 info using node@v0.8.0
+4 verbose config file /home/romain/.npmrc
+5 verbose config file /usr/etc/npmrc
+6 verbose config file /usr/lib/node_modules/npm/npmrc
+7 verbose adduser before first PUT { name: 'filirom1',
+7 verbose adduser   salt: '494e753b-d85c-4462-a89e-7884a31fb808',
+7 verbose adduser   password_sha: '075fe79768f5c0efaa1d0d74cdb503dbb1e4841c',
+7 verbose adduser   email: 'filirom1@gmail.com',
+7 verbose adduser   _id: 'org.couchdb.user:filirom1',
+7 verbose adduser   type: 'user',
+7 verbose adduser   roles: [],
+7 verbose adduser   date: '2012-06-28T07:24:32.070Z' }
+8 verbose url raw /-/user/org.couchdb.user:filirom1
+9 verbose url resolving [ 'https://registry.npmjs.org/',
+9 verbose url resolving   './-/user/org.couchdb.user:filirom1' ]
+10 verbose url resolved https://registry.npmjs.org/-/user/org.couchdb.user:filirom1
+11 http PUT https://registry.npmjs.org/-/user/org.couchdb.user:filirom1
+12 http 409 https://registry.npmjs.org/-/user/org.couchdb.user:filirom1
+13 verbose adduser update existing user
+14 verbose url raw /-/user/org.couchdb.user:filirom1
+15 verbose url resolving [ 'https://registry.npmjs.org/',
+15 verbose url resolving   './-/user/org.couchdb.user:filirom1' ]
+16 verbose url resolved https://registry.npmjs.org/-/user/org.couchdb.user:filirom1
+17 http GET https://registry.npmjs.org/-/user/org.couchdb.user:filirom1
+18 http 200 https://registry.npmjs.org/-/user/org.couchdb.user:filirom1
+19 verbose adduser userobj { name: 'filirom1',
+19 verbose adduser   salt: '494e753b-d85c-4462-a89e-7884a31fb808',
+19 verbose adduser   password_sha: '075fe79768f5c0efaa1d0d74cdb503dbb1e4841c',
+19 verbose adduser   email: 'filirom1@gmail.com',
+19 verbose adduser   _id: 'org.couchdb.user:filirom1',
+19 verbose adduser   type: 'user',
+19 verbose adduser   roles: [],
+19 verbose adduser   date: '2012-06-28T07:24:32.070Z',
+19 verbose adduser   _rev: '2-817b8bce96d0ca407ed4319d52d7aa49',
+19 verbose adduser   _etag: '"2-817b8bce96d0ca407ed4319d52d7aa49"' }
+20 verbose url raw /-/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49
+21 verbose url resolving [ 'https://registry.npmjs.org/',
+21 verbose url resolving   './-/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49' ]
+22 verbose url resolved https://registry.npmjs.org/-/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49
+23 http PUT https://registry.npmjs.org/-/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49
+24 http 409 https://registry.npmjs.org/-/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49
+25 verbose adduser back [ [Error: conflict Document update conflict.: -/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49],
+25 verbose adduser   { error: 'conflict', reason: 'Document update conflict.' },
+25 verbose adduser   '{"error":"conflict","reason":"Document update conflict."}' ]
+26 error Error: conflict Document update conflict.: -/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49
+26 error     at RegClient.<anonymous> (/usr/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:177:14)
+26 error     at Request.init.self.callback (/usr/lib/node_modules/npm/node_modules/request/main.js:119:22)
+26 error     at Request.EventEmitter.emit (events.js:91:17)
+26 error     at Request.<anonymous> (/usr/lib/node_modules/npm/node_modules/request/main.js:521:16)
+26 error     at Request.EventEmitter.emit (events.js:88:17)
+26 error     at IncomingMessage.Request.start.self.req.self.httpModule.request.buffer (/usr/lib/node_modules/npm/node_modules/request/main.js:483:14)
+26 error     at IncomingMessage.EventEmitter.emit (events.js:115:20)
+26 error     at IncomingMessage._emitEnd (http.js:366:10)
+26 error     at HTTPParser.parserOnMessageComplete [as onMessageComplete] (http.js:149:23)
+26 error     at CleartextStream.socketOnData [as ondata] (http.js:1356:20)
+26 error  [Error: conflict Document update conflict.: -/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49]
+27 error You may report this log at:
+27 error     <http://github.com/isaacs/npm/issues>
+27 error or email it to:
+27 error     <npm-@googlegroups.com>
+28 error System Linux 3.4.4-2-ARCH
+29 error command "/usr/bin/node" "/usr/bin/npm" "adduser"
+30 error cwd /home/romain/npm2arch
+31 error node -v v0.8.0
+32 error npm -v 1.1.32
+33 error message conflict Document update conflict.: -/user/org.couchdb.user:filirom1/-rev/2-817b8bce96d0ca407ed4319d52d7aa49
+34 verbose exit [ 1, true ]
