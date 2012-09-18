@@ -5,7 +5,13 @@ fs       = require 'fs'
 
 # transform pkg.json of `npmName` into a PKGBUILD
 # `cb` is called like this: `cb(err, pkgbuild)`
-module.exports = (npmName, cb) ->
+module.exports = (npmName, options, cb) ->
+
+  if typeof options is 'function'
+    cb = options
+    options = null
+
+  options or= {}
 
   # Execute npm info `argv[0]`
   npm.load loglevel:'silent', (er)->
@@ -24,6 +30,7 @@ module.exports = (npmName, cb) ->
     pkg.maintainers = [pkg.maintainers] if typeof pkg.maintainers is 'string'
     pkg.homepage or= pkg.url
     pkg.homepage or= pkg.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '').replace(/(\.\w*)\:/g, '$1\/') if pkg.repository?.url
+    pkg.depends = options.depends
     populateTemplate pkg
 
   # Populate the template
@@ -48,7 +55,7 @@ pkgdesc=\"{{{description}}}\"
 arch=(any)
 url=\"{{{homepage}}}\"
 license=({{#licenses}}{{{type}}}{{/licenses}})
-depends=(nodejs)
+depends=('nodejs' {{#depends}}'{{{.}}}' {{/depends}})
 source=(http://registry.npmjs.org/$_npmname/-/$_npmname-$pkgver.tgz)
 noextract=($_npmname-$pkgver.tgz)
 sha1sums=({{#dist}}{{{shasum}}}{{/dist}})

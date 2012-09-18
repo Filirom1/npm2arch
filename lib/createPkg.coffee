@@ -22,7 +22,7 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
   tmpDir = '/tmp/npm2archinstall-' + randomId
 
   # Create a package for archlinux with makepkg cmd
-  npm2arch npmName, (err, pkgbuild)->
+  npm2arch npmName, options, (err, pkgbuild)->
     return cb err if err
     # Create a tmp directory to work on
     fs.mkdir tmpDir, '0755', (err)->
