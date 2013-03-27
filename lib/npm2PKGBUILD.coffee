@@ -35,6 +35,7 @@ module.exports = (npmName, options, cb) ->
       key = (Object.keys o)[0]
       value = o[key]
       return "#{key}: #{value}"
+    pkg.archVersion = pkg.version.replace(/-/, '_')
     populateTemplate pkg
 
   # Populate the template
@@ -52,8 +53,9 @@ template = '''{{#author}}
 # Maintainer: {{{.}}}
 {{/maintainers}}
 _npmname={{{name}}}
+_npmver={{{version}}}
 pkgname=nodejs-{{{nameLowerCase}}} # All lowercase
-pkgver={{{version}}}
+pkgver={{{archVersion}}}
 pkgrel=1
 pkgdesc=\"{{{description}}}\"
 arch=(any)
@@ -61,8 +63,8 @@ url=\"{{{homepage}}}\"
 license=({{#licenses}}{{{type}}}{{/licenses}})
 depends=('nodejs' {{#depends}}'{{{.}}}' {{/depends}})
 optdepends=({{#optdepends}}'{{{.}}}' {{/optdepends}})
-source=(http://registry.npmjs.org/$_npmname/-/$_npmname-$pkgver.tgz)
-noextract=($_npmname-$pkgver.tgz)
+source=(http://registry.npmjs.org/$_npmname/-/$_npmname-$_npmver.tgz)
+noextract=($_npmname-$_npmver.tgz)
 sha1sums=({{#dist}}{{{shasum}}}{{/dist}})
 
 build() {
@@ -70,7 +72,7 @@ build() {
   local _npmdir="$pkgdir/usr/lib/node_modules/"
   mkdir -p $_npmdir
   cd $_npmdir
-  npm install -g --prefix "$pkgdir/usr" $_npmname@$pkgver
+  npm install -g --prefix "$pkgdir/usr" $_npmname@$_npmver
 }
 
 # vim:set ts=2 sw=2 et:'''
