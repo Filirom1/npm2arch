@@ -11,7 +11,7 @@ vows.describe('Test npm2arch')
 .addBatch
   'When calling npm2PKGBUILD with an existing package in npm':
     topic: ->
-      npm2PKGBUILD 'npm2arch', depends: ['curl', 'git'], @callback
+      npm2PKGBUILD 'npm2arch', depends: ['curl', 'git'], optdepends: [ phantomjs: 'browser-run test suite'], @callback
       return
     'Then a PKGBUILD is created': (err, pkgbuild) ->
       assert.isNull err
@@ -22,6 +22,7 @@ vows.describe('Test npm2arch')
       assert.include pkgbuild, 'url="https://github.com/Filirom1/npm2arch"'
       assert.include pkgbuild, 'pkgdesc="Convert NPM package to a PKGBUILD for ArchLinux"'
       assert.include pkgbuild, "depends=('nodejs' 'curl' 'git' )"
+      assert.include pkgbuild, "optdepends=('phantomjs: browser-run test suite' )"
 
   'When calling npm2PKGBUILD with a packge in UPPER CASE':
     topic: ->

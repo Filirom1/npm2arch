@@ -31,6 +31,10 @@ module.exports = (npmName, options, cb) ->
     pkg.homepage or= pkg.url
     pkg.homepage or= pkg.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '').replace(/(\.\w*)\:/g, '$1\/') if pkg.repository?.url
     pkg.depends = options.depends
+    pkg.optdepends = options.optdepends?.map (o)->
+      key = (Object.keys o)[0]
+      value = o[key]
+      return "#{key}: #{value}"
     populateTemplate pkg
 
   # Populate the template
@@ -56,6 +60,7 @@ arch=(any)
 url=\"{{{homepage}}}\"
 license=({{#licenses}}{{{type}}}{{/licenses}})
 depends=('nodejs' {{#depends}}'{{{.}}}' {{/depends}})
+optdepends=({{#optdepends}}'{{{.}}}' {{/optdepends}})
 source=(http://registry.npmjs.org/$_npmname/-/$_npmname-$pkgver.tgz)
 noextract=($_npmname-$pkgver.tgz)
 sha1sums=({{#dist}}{{{shasum}}}{{/dist}})
