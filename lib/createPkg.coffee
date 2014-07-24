@@ -38,9 +38,8 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
       fs.writeFile path.join(tmpDir, "PKGBUILD"), pkgbuild, (err)->
         return cb2 err if err
         # Spawn makepkg
-        child = spawn 'makepkg', makePkgArgv, cwd: tmpDir, env: process.env, setsid: false
-        child.stdout.pipe(process.stdout, end: false) if verbose
-        child.stderr.pipe(process.stderr, end: false) if verbose
+        stdio = if verbose then 'inherit' else 'ignore'
+        child = spawn 'makepkg', makePkgArgv, cwd: tmpDir, env: process.env, setsid: false, stdio: stdio
         child.on 'exit', (code) ->
           cb2 err "Bad status code returned from `makepkg`: #{code}" if code is not 0
           # Get the package file name
