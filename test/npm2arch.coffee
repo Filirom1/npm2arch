@@ -45,7 +45,7 @@ describe 'Test npm2arch', ->
         assert.include file, '-dir/'
         assert.include file, 'nodejs-npm2arch-'
         assert.include file, '.src.tar.gz'
-        assert.isTrue path.existsSync file
+        assert.isTrue fs.existsSync file
         rimraf.sync path.dirname file
         done()
 

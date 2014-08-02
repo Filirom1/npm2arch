@@ -47,7 +47,7 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
             return cb2 err if err
             pkgFile = (files.filter (file)-> file.indexOf('nodejs-') is 0)[0]
             newPkgFile = path.join(process.cwd(), path.basename pkgFile)
-            fs.unlinkSync newPkgFile if path.existsSync newPkgFile
+            fs.unlinkSync newPkgFile if fs.existsSync newPkgFile
             fs.move path.join(tmpDir, pkgFile), newPkgFile, (err)->
               cb2 err if err
               cb2 null, newPkgFile
