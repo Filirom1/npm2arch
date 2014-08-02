@@ -1,5 +1,5 @@
 {npm2PKGBUILD, createPkg} = require '../index'
-mocha  = require 'mocha' 
+mocha  = require 'mocha'
 vows   = require 'vows'
 assert = require 'assert'
 path   = require 'path'
@@ -14,8 +14,6 @@ describe 'Test npm2arch', ->
       npm2PKGBUILD 'npm2arch', depends: ['curl', 'git'], optdepends: [ phantomjs: 'browser-run test suite'], (err, pkgbuild) ->
         assert.isNull err
         assert.isNotNull pkgbuild
-        assert.include pkgbuild, "# Author: Filirom1 <filirom1@gmail.com>"
-        assert.include pkgbuild, "# Maintainer: filirom1 <filirom1@gmail.com>"
         assert.include pkgbuild, "license=(MIT)"
         assert.include pkgbuild, 'url="https://github.com/Filirom1/npm2arch"'
         assert.include pkgbuild, 'pkgdesc="Convert NPM package to a PKGBUILD for ArchLinux"'
