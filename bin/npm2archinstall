@@ -21,7 +21,6 @@ createPkg(npmName, function(err, pkgFile){
   if(err) handleError(err);
   // Install the pckage via a sudo pacman -U `pkgFile`
   console.log('\nsudo pacman -U ' + pkgFile);
-  process.stdin.resume();
   var pacman = spawn('sudo', ['pacman', '-U', pkgFile], {stdio: 'inherit'});
   pacman.on('exit', function (code) {
     fs.unlink(pkgFile, function(err){

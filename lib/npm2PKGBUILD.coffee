@@ -26,8 +26,6 @@ module.exports = (npmName, options, cb) ->
     pkg = data[version]
     pkg = cleanup pkg
     pkg.nameLowerCase = pkg.name.toLowerCase()
-    pkg.contributors = [pkg.contributors] if typeof pkg.contributors is 'string'
-    pkg.maintainers = [pkg.maintainers] if typeof pkg.maintainers is 'string'
     pkg.homepage or= pkg.url
     pkg.homepage or= pkg.repository.url.replace(/^git(@|:\/\/)/, 'http://').replace(/\.git$/, '').replace(/(\.\w*)\:/g, '$1\/') if pkg.repository?.url
     pkg.depends = options.depends
@@ -42,17 +40,7 @@ module.exports = (npmName, options, cb) ->
   populateTemplate = (pkg) ->
     cb null, mustache.to_html(template, pkg)
 
-
-template = '''{{#author}}
-# Author: {{{author}}}
-{{/author}}
-{{#contributors}}
-# Contributor: {{{.}}}
-{{/contributors}}
-{{#maintainers}}
-# Maintainer: {{{.}}}
-{{/maintainers}}
-_npmname={{{name}}}
+template = '''_npmname={{{name}}}
 _npmver={{{version}}}
 pkgname=nodejs-{{{nameLowerCase}}} # All lowercase
 pkgver={{{archVersion}}}
