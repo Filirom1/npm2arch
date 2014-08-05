@@ -3,19 +3,18 @@ require('coffee-script');
 var createPkg = require('../lib/createPkg');
 
 if(process.argv.length < 3){
-  console.error("Usage: npm2archpkg `npm-name` [-f or any makepkg arguments]");
+  console.error("Usage: npm2aurball `npm-name`");
   process.exit(-1);
 }
 
 var npmName = process.argv[2];
-var otherArgv = process.argv.slice(3, process.argv.length);
 
 function handleError(err){
   console.error(err);
   process.exit(-1);
 }
 
-createPkg(npmName, otherArgv, function(err, pkgFile){
+createPkg(npmName, 'aurball', function(err, pkgFile){
   if(err) handleError(err);
-  console.log("Package created: "+pkgFile);
+  console.log("AUR tarball created: "+pkgFile);
 });

@@ -24,16 +24,23 @@ Usage
 
 ### npm2PKGBUILD
 
-Transform a npm package into an ArchLinux PKGBUILD
+Transform an npm package into an ArchLinux PKGBUILD
 
     npm2PKGBUILD `npm-name` > PKGBUILD
     makepkg
     pacman -U nodejs-`name`-`version`-any.pkg.tar.xz
 
 
+### npm2aurball
+
+Transform an npm package into an AUR tarball using `mkaurball`
+
+    npm2aurball `npm-name`
+
+
 ### npm2archpkg
 
-Transform a npm package into an ArchLinux package archive
+Transform an npm package into an ArchLinux package archive
 
     npm2archpkg `npm-name`
     pacman -U nodejs-`name`-`version`-any.pkg.tar.xz
@@ -41,7 +48,7 @@ Transform a npm package into an ArchLinux package archive
 
 ### npm2archinstall
 
-Install a npm package with pacman
+Install an npm package with pacman
 
     npm2archinstall `npm-name`
 

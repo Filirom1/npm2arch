@@ -15,6 +15,8 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
   if typeof options is 'function'
     cb = options
     options = null
+  aurball = makePkgArgv == 'aurball'
+  makePkgArgv = [] if aurball
   makePkgArgv or= []
   options or= verbose: true
   verbose = options.verbose
@@ -37,11 +39,16 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
       # Write the PKGBUILD file in the tmpDir
       fs.writeFile path.join(tmpDir, "PKGBUILD"), pkgbuild, (err)->
         return cb2 err if err
-        # Spawn makepkg
+        # Spawn makepkg/mkaurball
         stdio = if verbose then 'inherit' else 'ignore'
-        child = spawn 'makepkg', makePkgArgv, cwd: tmpDir, env: process.env, setsid: false, stdio: stdio
+        opts = cwd: tmpDir, env: process.env, setsid: false, stdio: stdio
+        child = if aurball
+          spawn 'mkaurball', [], opts
+        else
+          spawn 'makepkg', makePkgArgv, opts
         child.on 'exit', (code) ->
-          cb2 err "Bad status code returned from `makepkg`: #{code}" if code is not 0
+          makepkg = if aurball then 'mkaurball' else 'makepkg'
+          cb2 err "Bad status code returned from `#{makepkg}`: #{code}" if code is not 0
           # Get the package file name
           fs.readdir tmpDir, (err, files)->
             return cb2 err if err

@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 require('coffee-script');
-var npm2arch = require('../lib/npm2PKGBUILD'),
-   createPkg = require('../lib/createPkg'),
-          fs = require('fs'),
-       spawn = require('child_process').spawn;
+var createPkg = require('../lib/createPkg'),
+           fs = require('fs'),
+        spawn = require('child_process').spawn;
 
 if(process.argv.length != 3){
   console.error("Usage: npm2archinstall `npm-name`");

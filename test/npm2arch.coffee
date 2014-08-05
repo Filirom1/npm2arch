@@ -49,6 +49,21 @@ describe 'Test npm2arch', ->
         rimraf.sync path.dirname file
         done()
 
+  it 'should create an AUR tarball when calling createPkg with a real package name', (done)->
+      randomId =  (((1+Math.random())*0x10000)|0).toString(16).substring(1)
+      dir = "/tmp/test-npm2arch-#{randomId}-dir/"
+      fs.mkdirSync dir
+      process.chdir dir
+      createPkg 'npm2arch', 'aurball', verbose: false, (err, file) ->
+        assert.isNull err
+        assert.include file, '/tmp/'
+        assert.include file, '-dir/'
+        assert.include file, 'nodejs-npm2arch-'
+        assert.include file, '.src.tar.gz'
+        assert.isTrue fs.existsSync file
+        rimraf.sync path.dirname file
+        done()
+
   it 'should return an error when calling createPkg with a bad package name', (done)->
       createPkg 'qsdfqsdfqsd', ['--source'], verbose: false, (err, file) ->
         assert.isNotNull err
