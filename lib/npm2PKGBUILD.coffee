@@ -62,6 +62,7 @@ build() {
   cd $_npmdir
   npm install -g --prefix "$pkgdir/usr" $_npmname@$_npmver
 }
+package() { true; }
 
 # vim:set ts=2 sw=2 et:'''
 

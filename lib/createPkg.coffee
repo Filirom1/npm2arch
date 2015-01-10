@@ -43,12 +43,12 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
         stdio = if verbose then 'inherit' else 'ignore'
         opts = cwd: tmpDir, env: process.env, setsid: false, stdio: stdio
         child = if aurball
-          spawn 'mkaurball', [], opts
+          spawn 'mkaurball', makePkgArgv, opts
         else
           spawn 'makepkg', makePkgArgv, opts
         child.on 'exit', (code) ->
           makepkg = if aurball then 'mkaurball' else 'makepkg'
-          cb2 err "Bad status code returned from `#{makepkg}`: #{code}" if code is not 0
+          return cb2 "Bad status code returned from `#{makepkg}`: #{code}" if code isnt 0
           # Get the package file name
           fs.readdir tmpDir, (err, files)->
             return cb2 err if err
@@ -56,5 +56,5 @@ module.exports = (npmName, makePkgArgv, options, cb) ->
             newPkgFile = path.join(process.cwd(), path.basename pkgFile)
             fs.unlinkSync newPkgFile if fs.existsSync newPkgFile
             fs.move path.join(tmpDir, pkgFile), newPkgFile, (err)->
-              cb2 err if err
+              return cb2 err if err
               cb2 null, newPkgFile
