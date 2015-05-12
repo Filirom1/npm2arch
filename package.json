@@ -2,7 +2,7 @@
   "author": "Filirom1 <filirom1@gmail.com>",
   "name": "npm2arch",
   "description": "Convert NPM package to a PKGBUILD for ArchLinux",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "homepage": "https://github.com/Filirom1/npm2arch",
   "repository": {
     "type": "git",
